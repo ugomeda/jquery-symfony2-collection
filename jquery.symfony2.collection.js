@@ -11,15 +11,18 @@
           name: '[Element Name]'
       }, options);
 
-      this.init();
+      this._init();
     };
 
     Collection.prototype = {
-      init: function() {
+      /**
+       * Attaches the delete link to all the elements, and adds the add button
+       */
+      _init: function() {
         var collection = this;
-        // Attach delete/add buttons
+        // Attach delete buttons
         this.settings.collectionHolder.find('> div, .collection-child').each(function() {
-          collection.addDeleteLink(this);
+          collection._addDeleteLink.call(collection, this);
         });
 
         this.settings.addButton.on('click', function(e){
@@ -34,22 +37,37 @@
         }
       },
 
-      addDeleteLink: function(child){
+      /**
+       * Appends the delete link to an element of the list
+       */
+      _addDeleteLink: function(child){
+        console.log(this);
         var collection = this;
 
-        var $removeFormA = this.settings.deleteButton.clone();
+        var button = this.settings.deleteButton.clone();
 
         if (this.settings.deleteButtonPath) {
-            child.find(this.settings.deleteButtonPath).append($removeFormA);
+            child.find(this.settings.deleteButtonPath).append(button);
         } else {
-            child.append($removeFormA);
+            child.append(button);
         }
 
-        $removeFormA.on('click', function(e) {
+        button.on('click', function(e) {
             e.preventDefault();
-            collection.element.trigger('collectionremove', [child[0]]);
-            child.remove();
+            collection.remove.call(collection, child);
         });
+      },
+
+      /**
+       * Removes the child from the list
+       */
+      remove: function(child) {
+        if (! child[0]) {
+          $.error("Calling remove on non existant item");
+        }
+
+        this.element.trigger('collectionremove', [child[0]]);
+        child.remove();
       },
 
       /**
@@ -70,7 +88,7 @@
           newForm = $( newForm );
           newForm.addClass('collection-child');
 
-          this.addDeleteLink(newForm);
+          this._addDeleteLink(newForm);
 
           if (this.settings.newChildrenContainer) {
               $(this.settings.newChildrenContainer).append(newForm);
