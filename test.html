@@ -92,7 +92,7 @@
 
         $("#test-button-remove").click(function(e) {
           e.preventDefault();
-          $("#test_childs2").collection('remove', $('#test_childs2 .collection-child').eq(1));
+          $("#test_childs2").collection('remove', $('#test_childs2 > div').eq(1));
         });
       });
     </script>
