@@ -39,6 +39,8 @@
       }
     }, options);
 
+    this.removeButtons = [];
+
     this._init();
   };
 
@@ -79,6 +81,7 @@
         collection.remove.call(collection, child);
       });
       find(child, this.settings.deleteButtonPath).append(button);
+      this.removeButtons.push(button);
     },
 
     /**
@@ -129,6 +132,14 @@
         collection: this
       });
       this.element.trigger(event);
+    },
+
+    destroy: function() {
+      this.addButton.remove();
+      $.each(this.removeButtons, function() {
+        $(this).remove();
+      });
+      this.element.data('jquery-collection', null);
     },
 
     getChildren: function() {

@@ -86,7 +86,8 @@
     <a href="#" id="test-button-add">Test button adding an item to the first list</a><br />
     <a href="#" id="test-button-nocollection">Test calling without a collection raises an exception</a><br />
     <a href="#" id="test-button-nomethod">Test calling undefined method raises an exception</a><br />
-    <a href="#" id="test-button-remove">Test remove second element in second list</a>
+    <a href="#" id="test-button-remove">Test remove second element in second list</a><br />
+    <a href="#" id="test-button-destroy">Destroy second list</a><br />
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="jquery.symfony2.collection.js"></script>
@@ -123,6 +124,11 @@
         $("#test-button-remove").click(function(e) {
           e.preventDefault();
           $("#test_childs2").collection('remove', $('#test_childs2 > div').eq(1));
+        });
+
+        $("#test-button-destroy").click(function(e) {
+          e.preventDefault();
+          $("#test_childs2").collection('destroy');
         });
       });
     </script>

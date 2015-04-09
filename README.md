@@ -63,6 +63,9 @@ $("#collection").collection('add');
 
 // Remove an element from a collection
 $("#collection").collection('remove', $('#collection > div').eq(1));
+
+// Disable the plugin
+$("#collection").collection('destroy');
 ```
 
 Events
