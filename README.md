@@ -54,6 +54,17 @@ The parameters are as follow :
 | replacements     | List of function to replace values in the prototype of a child.    |
 
 
+Methods
+-------
+
+```js
+// Add an element to a collection
+$("#collection").collection('add');
+
+// Remove an element from a collection
+$("#collection").collection('remove', $('#collection > div').eq(1));
+```
+
 Events
 ------
 
