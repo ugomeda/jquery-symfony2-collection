@@ -29,8 +29,11 @@
       // Path (relative to the collection) to find the children
       childrenSelector: "> div",
 
-      // Woot
-      name: '[Element Name]'
+      // Replacement providers for the prototype
+      replacements: {
+        '__name__label__': function(collection) { return "#" + collection.index; },
+        '__name__': function(collection) { return collection.index; },
+      }
     }, options);
 
     this._init();
@@ -98,23 +101,23 @@
        * Adds an element to the list
        */
       add: function(){
-          var prototype = this.element.attr('data-prototype');
+        var collection = this;
+        var prototype = this.element.attr('data-prototype');
 
-          // Replace '__name__' in the prototype's HTML to
-          // instead be a number based on the current collection's length.
-          var newForm = prototype.replace(/__name__label__/g, this.settings.name + this.index);
-          newForm = newForm.replace( /__name__/g, this.index);
-          newForm = $( newForm );
+        $.each(this.settings.replacements, function(property, fct) {
+          prototype = prototype.replace(new RegExp(property, 'g'), fct(collection));
+        });
+        child = $(prototype);
 
-          this._addDeleteLink(newForm);
-          find(this.element, this.settings.newChildPath).append(newForm);
-          this.index++;
+        this._addDeleteLink(child);
+        find(this.element, this.settings.newChildPath).append(child);
+        this.index++;
 
-          var event = jQuery.Event('collectionadd', {
-            child: newForm[0],
-            collection: this
-          });
-          this.element.trigger(event);
+        var event = jQuery.Event('collectionadd', {
+          child: child[0],
+          collection: this
+        });
+        this.element.trigger(event);
       },
 
       getChildren: function() {
