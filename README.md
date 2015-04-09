@@ -33,14 +33,28 @@ Events are triggered when the collection is manipulated :
 - ```collectionadd``` is triggered after a child has been added to the collection
 - ```collectionremove``` is triggered before a child is removed from the collection
 
-In both case, the DOM object manipulated is passed as an argument
+These events have two properties :
+
+- ```event.child``` is the DOM element being manipulated
+- ```event.collection``` is the current collection object
+
+A call of ```event.preventDefault()``` on a ```collectionremove``` event
+will cancel the child removal.
 
 ```js
-$("#collection").on('collectionadd', function(event, child) {
-  $(child).find('select').select2(); // some random examples
-  $(child).find('.datetime').datepicker();
-}).on('collectionremove', function(event, child) {
-  $(child).find('select').select2('destroy');
-  $(child).find('.datetime').datepicker('destroy');
-}).collection();
+$("#collection")
+  .on('collectionadd', function(event) {
+    $(event.child).find('select').select2();
+    $(event.child).find('.datetime').datepicker();
+  })
+  .on('collectionremove', function(event) {
+    if (event.collection.getChildren().length == 1) {
+      event.preventDefault();
+      console.log("You need at least one item !");
+    }
+    else {
+      $(event.child).find('select').select2('destroy');
+      $(event.child).find('.datetime').datepicker('destroy');
+    }
+  }).collection();
 ```
