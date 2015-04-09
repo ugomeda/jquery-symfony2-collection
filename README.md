@@ -1,9 +1,16 @@
 jquery-symfony2-collection
 ==========================
 
-Read about collections here:
+This jQuery plugin makes it easy to provide forms containing collections. It creates
+buttons to add and remove elements inside a collection.
+
+You can read mode about the server side here :
 http://symfony.com/doc/current/reference/forms/types/collection.html
 
+This plugin replaces the javascript at the end of the documentation with a more
+flexible solution.
+
+On the client side, it's as easy as :
 
 ```js
 $(function() {
@@ -16,14 +23,36 @@ $(function() {
 Advanced use:
 
 ```js
-$("#collection").collection({
+$("#collection").collection{
   addButton: $('<a href="#" class="add-collection-item">Add</a>'),
+  addButtonPath: null,
   deleteButton: $('<a href="#" class="delete-collection-item">Delete</a>'),
-  deleteButtonPath: null, // where to append the delete button in the new child
-  addButtonContainer: null, // where should the plugin put the add button
-  newChildrenContainer: null, // where should it put new children
-});
+  deleteButtonPath: null,
+  newChildPath: null,
+  childrenSelector: "> div",
+  replacements: {
+    '__name__label__': function(collection) {
+      return collection.index;
+    },
+    '__name__': function(collection) {
+      return collection.index;
+    },
+  }
+}
 ```
+
+The parameters are as follow :
+
+| Parameter        | Value                                                              |
+| ---------------- | ------------------------------------------------------------------ |
+| addButton        | The element to be added as the add button.                         |
+| addButtonPath    | The path, relative to ```#collection```, to place the add button.  |
+| deleteButton     | The element to be added to each child as the delete button.        |
+| deleteButtonPath | The path, relative to the child, to place the delete button.       |
+| newChildPath     | The path, relative to ```#collection```, to place new children.    |
+| childrenSelector | The selector, relative to ```#collection```, to find children.     |
+| replacements     | List of function to replace values in the prototype of a child.    |
+
 
 Events
 ------
