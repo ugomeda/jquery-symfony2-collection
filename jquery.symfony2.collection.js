@@ -84,19 +84,25 @@
 
     $.fn.collection = function(method) {
       var args = arguments;
-      // Method calling logic
-      if ( typeof method == 'string' || method instanceof String ) {
+
+      if ( typeof method === 'string' || method instanceof String ) {
         var instance = this.data('jquery-collection');
-        instance[method].apply(instance, Array.prototype.slice.call( arguments, 1 ));
+        if (! instance) {
+          $.error("No collection initialized for this element");
+        }
+
+        if(typeof instance[method] !== 'function') {
+          $.error("Method " + method + " does not exists");
+        }
+        instance[method].apply(instance, Array.prototype.slice.call(args, 1));
+
         return this;
-      } else if ( typeof method === 'object' || ! method ) {
+      } else {
         return $(this).each(function() {
           var el = $(this);
           var instance = new Collection(el, args[0]);
           el.data('jquery-collection', instance);
         });
-      } else {
-        $.error( 'Method ' +  method + ' does not exist on jQuery.tooltip' );
       }
     };
 })( jQuery );

@@ -58,7 +58,9 @@
       </div>
     </form>
     <hr />
-    <a href="#" id="test-button">Test button adding an item to the first list</a>
+    <a href="#" id="test-button-add">Test button adding an item to the first list</a><br />
+    <a href="#" id="test-button-nocollection">Test calling without a collection raises an exception</a><br />
+    <a href="#" id="test-button-nomethod">Test calling undefined method raises an exception</a>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="jquery.symfony2.collection.js"></script>
@@ -71,10 +73,20 @@
           console.log("collectionremove", child);
         }).collection();
 
-        // Test button
-        $("#test-button").click(function(e) {
+        // Test buttons
+        $("#test-button-add").click(function(e) {
           e.preventDefault();
           $("#test_childs").collection('add');
+        });
+        
+        $("#test-button-nocollection").click(function(e) {
+          e.preventDefault();
+          $("body").collection('add');
+        });
+
+        $("#test-button-nomethod").click(function(e) {
+          e.preventDefault();
+          $("#test_childs").collection('doesNotExists');
         });
       });
     </script>
