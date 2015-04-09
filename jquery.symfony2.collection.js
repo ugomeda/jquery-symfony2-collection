@@ -31,7 +31,7 @@
       // Replacement providers for the prototype
       replacements: {
         '__name__label__': function(collection) {
-          return "#" + collection.index;
+          return collection.index;
         },
         '__name__': function(collection) {
           return collection.index;
@@ -55,7 +55,7 @@
 
       // Attach delete buttons
       children.each(function() {
-        collection._addDeleteLink.call(collection, this);
+        collection._addDeleteLink.call(collection, $(this));
       });
 
       // Attach add button
@@ -113,7 +113,15 @@
       child = $(prototype);
 
       this._addDeleteLink(child);
-      find(this.element, this.settings.newChildPath).append(child);
+
+      // Appand at the end of the container, but before the add link
+      var container = find(this.element, this.settings.newChildPath);
+      if (this.addButton.parent().is(container)) {
+        child.insertBefore(this.addButton);
+      }
+      else {
+        container.append(child);
+      }
       this.index++;
 
       var event = jQuery.Event('collectionadd', {
