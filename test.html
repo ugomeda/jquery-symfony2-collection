@@ -68,10 +68,15 @@
     <script type="text/javascript">
       $(function() {
         // Add the collections
-        $("#test_childs, #test_childs2").on('collectionadd', function(event, child) {
-          console.log("collectionadd", child);
-        }).on('collectionremove', function(event, child) {
-          console.log("collectionremove", child);
+        $("#test_childs, #test_childs2").on('collectionadd', function(event) {
+          console.log("collectionadd", event.child);
+        }).on('collectionremove', function(event) {
+          console.log("collectionremove", event.child, event.collection);
+
+          if (event.collection.getChildren().length == 1) {
+            event.preventDefault();
+            console.log("Prevented removal of the last item !");
+          }
         }).collection();
 
         // Test buttons

@@ -1,11 +1,9 @@
 (function($){
   var find = function(item, selector) {
     if (selector === null || typeof selector === "undefined") {
-      console.log("undefined");
       return item;
     }
     else {
-      console.log(selector, typeof selector);
       return item.find(selector);
     }
   };
@@ -46,7 +44,7 @@
         var collection = this;
 
         // Find the length of the collection
-        var children = this.element.find(this.settings.childrenSelector);
+        var children = this.getChildren();
         this.index = children.length;
 
         // Attach delete buttons
@@ -60,8 +58,6 @@
             e.preventDefault();
             collection.add();
         });
-        console.log(this.addButton);
-        console.log(find(this.element, this.settings.addButtonPath).length);
         find(this.element, this.settings.addButtonPath).append(this.addButton);
       },
 
@@ -87,8 +83,15 @@
           $.error("Calling remove on non existant item");
         }
 
-        this.element.trigger('collectionremove', [child[0]]);
-        child.remove();
+        var event = jQuery.Event('collectionremove', {
+          child: child[0],
+          collection: this
+        });
+        this.element.trigger(event);
+
+        if (! event.isDefaultPrevented()) {
+          child.remove();
+        }
       },
 
       /**
@@ -106,7 +109,16 @@
           this._addDeleteLink(newForm);
           find(this.element, this.settings.newChildPath).append(newForm);
           this.index++;
-          this.element.trigger('collectionadd', [newForm[0]]);
+
+          var event = jQuery.Event('collectionadd', {
+            child: newForm[0],
+            collection: this
+          });
+          this.element.trigger(event);
+      },
+
+      getChildren: function() {
+        return this.element.find(this.settings.childrenSelector);
       }
     };
 
