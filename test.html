@@ -31,6 +31,7 @@
     &lt;/div&gt;"></div>
 
         </div>
+        <hr />
         <div class="form-group">
             <label class="control-label required">Test collection 2</label>
             <div id="test_childs2" data-prototype="&lt;div class=&quot;form-group&quot;&gt;
@@ -56,15 +57,25 @@
         </div>
       </div>
     </form>
+    <hr />
+    <a href="#" id="test-button">Test button adding an item to the first list</a>
+
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="jquery.symfony2.collection.js"></script>
     <script type="text/javascript">
       $(function() {
+        // Add the collections
         $("#test_childs, #test_childs2").on('collectionadd', function(event, child) {
           console.log("collectionadd", child);
         }).on('collectionremove', function(event, child) {
           console.log("collectionremove", child);
         }).collection();
+
+        // Test button
+        $("#test-button").click(function(e) {
+          e.preventDefault();
+          $("#test_childs").collection('add');
+        });
       });
     </script>
 	</body>
